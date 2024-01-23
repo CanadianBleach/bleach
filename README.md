@@ -1,2 +1,2 @@
 # bleach
- A site to document everything I work on.
+ A site to document all of my work. Visit my [blog](https://connorb.myportfolio.com).
