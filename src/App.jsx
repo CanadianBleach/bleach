@@ -84,25 +84,25 @@ export default function App() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Project
             link='https://liminal-eosin.vercel.app/'
-            image='./public/images/liminal.png'
+            image='/images/liminal.png'
             title='Liminal'
             description='a game made in three.js'
           />
           <Project
             link='https://time-traveler.vercel.app/'
-            image='./public/images/time-traveler.png'
+            image='/images/time-traveler.png'
             title='Time Traveler'
             description='do you have the same song on reapeat... i do.'
           />
           <Project
             link='https://bindaddy-util.vercel.app/'
-            image='./public/images/bd-util.png'
+            image='/images/bd-util.png'
             title='BD-Util'
             description='client management tool for bindaddy'
           />
           <Project
             link='https://github.com/CanadianBleach/Unity-Weapon-Package'
-            image='./public/images/unity-weapons-package.png'
+            image='/images/unity-weapons-package.png'
             title='Unity Weapons Package'
             description='unity weapon management utility'
           />
