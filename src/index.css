@@ -75,8 +75,10 @@ body {
 
 .gradient-bg {
   width: 100vw;
-  height: 100vh;
-  position: relative;
+  min-height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   overflow: hidden;
   background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
   top: 0;

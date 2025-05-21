@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import '@fontsource/anton'; // Optional: '@fontsource/anton/400.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 
