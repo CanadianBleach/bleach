@@ -34,12 +34,17 @@ export default function Home() {
         const blob = bubbleRef.current;
         if (!blob) return;
 
-        let curX = 0, curY = 0, tgX = 0, tgY = 0;
+        let curX = 0,
+            curY = 0,
+            tgX = 0,
+            tgY = 0;
 
         const move = () => {
             curX += (tgX - curX) / 20;
             curY += (tgY - curY) / 20;
-            blob.style.transform = `translate(${Math.round(curX - 100)}px, ${Math.round(curY - 100)}px)`;
+            blob.style.transform = `translate(${Math.round(curX - 100)}px, ${Math.round(
+                curY - 100
+            )}px)`;
             requestAnimationFrame(move);
         };
 
@@ -66,7 +71,7 @@ export default function Home() {
         <>
             <GradientBackground blobRef={bubbleRef} />
 
-            <section className="min-h-screen w-full flex flex-col items-center justify-center text-center gap-4 z-10 relative text-white">
+            <section className="min-h-screen w-full flex flex-col items-center justify-center text-center gap-4 z-10 relative text-black dark:text-white">
                 <h1 className="font-anton text-6xl md:text-8xl font-extrabold">
                     here’s my stuff
                 </h1>
@@ -77,8 +82,7 @@ export default function Home() {
 
             <ScrollArrow visible={atTop} />
 
-            <section
-                className="w-full h-screen relative z-0 overflow-hidden">
+            <section className="w-full h-screen relative z-0 overflow-hidden">
                 <ConstellationCanvas />
             </section>
         </>
@@ -115,8 +119,8 @@ function GradientBackground({ blobRef }) {
 function ScrollArrow({ visible }) {
     return (
         <div
-            className={`fixed bottom-4 left-1/2 m-4 -translate-x-1/2 z-20 text-white transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'
-                } animate-bounce`}
+            className={`fixed bottom-4 left-1/2 m-4 -translate-x-1/2 z-20 transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'
+                } text-black dark:text-white animate-bounce`}
         >
             <ArrowDown size={44} />
         </div>

@@ -1,4 +1,14 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+html {
+  @apply bg-white text-black;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    @apply bg-black text-white;
+  }
+}
 
 html,
 body {
@@ -18,7 +28,7 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 96px;
-  color: white;
+  @apply text-black dark:text-white;
   opacity: 0.8;
   user-select: none;
   text-shadow: 1px 1px rgba(0, 0, 0, 0.1);
