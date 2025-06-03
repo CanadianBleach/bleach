@@ -15,6 +15,7 @@ body {
   font-family: "Dongle", sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 .text-container {
@@ -35,17 +36,33 @@ body {
 }
 
 :root {
-  --color-bg1: #000014;
-  --color-bg2: #110022;
+  --color-bg1: #fefefe;
+  --color-bg2: #f3f4f6; /* tailwind gray-100 */
 
-  --color1: 255, 0, 150; /* hot pink */
-  --color2: 0, 255, 255; /* bright cyan */
-  --color3: 255, 255, 0; /* neon yellow */
-  --color4: 0, 255, 100; /* acid green */
-  --color5: 255, 69, 0; /* laser orange */
+  --color1: 255, 200, 240;
+  --color2: 200, 255, 255;
+  --color3: 255, 255, 180;
+  --color4: 180, 255, 200;
+  --color5: 255, 180, 180;
 
-  --color-interactive: 255, 255, 255; /* white */
-  --blending: screen;
+  --color-interactive: 0, 0, 0; /* black for light mode */
+  --blending: multiply;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg1: #000014;
+    --color-bg2: #110022;
+
+    --color1: 255, 0, 150;
+    --color2: 0, 255, 255;
+    --color3: 255, 255, 0;
+    --color4: 0, 255, 100;
+    --color5: 255, 69, 0;
+
+    --color-interactive: 255, 255, 255;
+    --blending: screen;
+  }
 }
 
 @keyframes moveInCircle {

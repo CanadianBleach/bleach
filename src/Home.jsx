@@ -7,6 +7,7 @@ import React from 'react';
 export default function Home() {
     const bubbleRef = useRef(null);
     const [atTop, setAtTop] = useState(true);
+    const scrollTargetRef = useRef(null);
 
     // Randomize blob styles
     useEffect(() => {
@@ -80,9 +81,11 @@ export default function Home() {
                 </h2>
             </section>
 
-            <ScrollArrow visible={atTop} />
+            <ScrollArrow visible={atTop} onClick={() => {
+                scrollTargetRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }} />
 
-            <section className="w-full h-screen relative z-0 overflow-hidden">
+            <section ref={scrollTargetRef} className="w-full h-screen relative z-0 overflow-hidden">
                 <ConstellationCanvas />
             </section>
         </>
@@ -116,10 +119,11 @@ function GradientBackground({ blobRef }) {
     );
 }
 
-function ScrollArrow({ visible }) {
+function ScrollArrow({ visible, onClick }) {
     return (
         <div
-            className={`fixed bottom-4 left-1/2 m-4 -translate-x-1/2 z-20 transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'
+            onClick={onClick}
+            className={`cursor-pointer fixed bottom-4 left-1/2 m-4 -translate-x-1/2 z-20 transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'
                 } text-black dark:text-white animate-bounce`}
         >
             <ArrowDown size={44} />

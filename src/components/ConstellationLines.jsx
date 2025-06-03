@@ -4,7 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import { graphData } from '../data/nodes';
 import React from 'react';
 
-export default function ConstellationLines({ nodeRefs }) {
+export default function ConstellationLines({ nodeRefs, darkMode }) {
   const lineRefs = useRef([]);
 
   useFrame(() => {
@@ -29,7 +29,11 @@ export default function ConstellationLines({ nodeRefs }) {
       {graphData.edges.map((_, i) => (
         <line key={i} ref={(el) => (lineRefs.current[i] = el)}>
           <bufferGeometry />
-          <lineBasicMaterial color="white" transparent opacity={0.4} />
+          <lineBasicMaterial
+            color={darkMode === true ? 'white' : 'black'}
+            transparent
+            opacity={0.4}
+          />
         </line>
       ))}
     </>

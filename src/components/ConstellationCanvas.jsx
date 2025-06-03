@@ -1,45 +1,49 @@
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import NodeStar from './NodeStar';
 import ConstellationLines from './ConstellationLines';
 import { graphData } from '../data/nodes';
 import React from 'react';
+import usePrefersDarkMode from '../hooks/usePrefersDarkMode';
 
 export default function ConstellationCanvas({ orbitEnabled = true }) {
-  // Create refs for all nodes (no hooks inside hooks)
-  const nodeRefs = {};
-  graphData.nodes.forEach((node) => {
-    nodeRefs[node.id] = useRef();
-  });
+  // Create refs for all nodes (no hooks inside loops)
+  const nodeRefs = useMemo(() => {
+    const refs = {};
+    graphData.nodes.forEach((node) => {
+      refs[node.id] = { current: null }; // mimic useRef shape
+    });
+    return refs;
+  }, []);
 
   return (
     <Canvas
       camera={{ position: [0, 0, 20], fov: 75 }}
       gl={{ alpha: true }}
       onCreated={({ camera, scene }) => {
-        camera.layers.enable(0); // Layer 0 = bloom
-        camera.layers.enable(1); // Layer 1 = non-bloom (text)
-
-        // Apply correct layers to objects after load
+        camera.layers.enable(0);
+        camera.layers.enable(1);
         scene.traverse((obj) => {
           if (obj.userData.type === 'star') obj.layers.set(0);
           if (obj.userData.type === 'text') obj.layers.set(1);
         });
       }}
     >
+      {/* ✅ Pass it here */}
       <SceneContent nodeRefs={nodeRefs} orbitEnabled={orbitEnabled} />
     </Canvas>
   );
 }
 
 function SceneContent({ nodeRefs, orbitEnabled }) {
+  const isDark = usePrefersDarkMode();
   const { camera } = useThree();
 
   useEffect(() => {
-    camera.layers.enable(0); // Bloom layer
-    camera.layers.enable(1); // No bloom for text
+    camera.layers.enable(0);
+    camera.layers.enable(1);
   }, [camera]);
 
   return (
@@ -57,7 +61,7 @@ function SceneContent({ nodeRefs, orbitEnabled }) {
         />
       ))}
 
-      <ConstellationLines nodeRefs={nodeRefs} />
+      <ConstellationLines nodeRefs={nodeRefs} darkMode={isDark} />
 
       <Stars radius={100} depth={50} count={1000} factor={4} fade speed={1} />
 
@@ -65,13 +69,8 @@ function SceneContent({ nodeRefs, orbitEnabled }) {
         <OrbitControls enableZoom={false} enablePan={true} enableRotate={true} />
       )}
 
-      {/* 🎆 Postprocessing only on layer 0 */}
       <EffectComposer>
-        <Bloom
-          luminanceThreshold={0}
-          luminanceSmoothing={0.5}
-          intensity={.25}
-        />
+        <Bloom luminanceThreshold={0} luminanceSmoothing={0.5} intensity={0.25} />
       </EffectComposer>
     </>
   );

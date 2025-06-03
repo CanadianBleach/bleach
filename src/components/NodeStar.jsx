@@ -3,8 +3,10 @@ import { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import React from 'react';
+import usePrefersDarkMode from '../hooks/usePrefersDarkMode';
 
 export default function NodeStar({ node, index, total, innerRef }) {
+  const isDark = usePrefersDarkMode();
   const groupRef = innerRef || useRef(); // fallback in case parent doesn't provide it
   const sphereRef = useRef();
   const textRef = useRef();
@@ -64,7 +66,7 @@ export default function NodeStar({ node, index, total, innerRef }) {
       <Text
         ref={textRef}
         fontSize={0.6}
-        color="white"
+        color = {isDark ? "white" : "black"}
         anchorX="center"
         anchorY="middle"
         position={[0, 0.8, 0]}
