@@ -15,7 +15,7 @@ export default function ConstellationLines({
   const lineRefs = useRef([]);
 
   useFrame(({ raycaster }) => {
-    raycaster.params.Line.threshold = 0.15; // default is 1 — try 0.02–0.1 for precise lines
+    raycaster.params.Line.threshold = 0.1;
 
     graphData.edges.forEach(({ from, to }, i) => {
       const fromRef = nodeRefs[from];
@@ -29,9 +29,11 @@ export default function ConstellationLines({
         ]);
         line.geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
         line.geometry.attributes.position.needsUpdate = true;
+        line.geometry.computeBoundingSphere(); // ✅ Crucial for raycasting accuracy
       }
     });
   });
+
 
   return (
     <>
