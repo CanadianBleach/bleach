@@ -43,6 +43,7 @@ export default function ConstellationLines({
 
         return (
           <line
+          raycastPriority={1}
             key={i}
             ref={(el) => (lineRefs.current[i] = el)}
             onPointerOver={(e) => {
@@ -61,6 +62,8 @@ export default function ConstellationLines({
               color={isHovered || isConnected ? 'yellow' : darkMode ? 'white' : 'black'}
               transparent
               opacity={isHovered || isConnected ? 1.0 : 0.4}
+              depthTest={true} // Default is fine here
+              depthWrite={false} // Prevent it from occluding other things
             />
           </line>
         );

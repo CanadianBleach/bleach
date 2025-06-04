@@ -61,8 +61,9 @@ export default function NodeStar({
       ref={groupRef}
       onPointerOver={() => setHoveredNodeId(node.id)}
       onPointerOut={() => setHoveredNodeId(null)}
+      onClick={() => { if (node.url) window.open(node.url, '_blank'); }}
     >
-      <mesh ref={sphereRef}>
+      <mesh ref={sphereRef} raycastPriority={2}>
         <sphereGeometry args={[0.3, 16, 16]} />
         <meshStandardMaterial
           color={isHovered || isConnected ? 'yellow' : baseColor}
