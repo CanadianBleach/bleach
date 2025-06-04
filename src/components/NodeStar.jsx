@@ -3,16 +3,27 @@ import { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import React from 'react';
-import usePrefersDarkMode from '../hooks/usePrefersDarkMode';
 
-export default function NodeStar({ node, index, total, innerRef }) {
-  const isDark = usePrefersDarkMode();
-  const groupRef = innerRef || useRef(); // fallback in case parent doesn't provide it
+const typeColors = {
+  project: '#ff69b4',
+  skill: '#1e90ff',
+  tool: '#32cd32',
+};
+
+export default function NodeStar({
+  node,
+  index,
+  total,
+  innerRef,
+  isHovered,
+  isConnected,
+  setHoveredNodeId,
+}) {
+  const groupRef = innerRef || useRef();
   const sphereRef = useRef();
   const textRef = useRef();
   const { camera } = useThree();
 
-  // Position using Fibonacci sphere
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
   const y = 1 - (index / (total - 1)) * 2;
   const radius = 8;
@@ -22,23 +33,17 @@ export default function NodeStar({ node, index, total, innerRef }) {
   const z = Math.sin(theta) * distance;
   const position = [x * radius, y * radius, z * radius];
 
-  const starColors = ['#ffffff', '#ffd700', '#ff4500', '#00bfff', '#87cefa']; // white, gold, red-orange, deep sky blue, light blue
-  const starColor = starColors[index % starColors.length];
-
   useEffect(() => {
     if (groupRef.current) {
       groupRef.current.position.set(...position);
       groupRef.current.userData.type = 'star';
-      groupRef.current.layers.set(0); // Bloom layer
+      groupRef.current.layers.set(0);
     }
-
     if (textRef.current) {
       textRef.current.userData.type = 'text';
-      textRef.current.layers.set(1); // No bloom
+      textRef.current.layers.set(1);
     }
-
     if (sphereRef.current?.material) {
-      sphereRef.current.material.emissive = new THREE.Color(starColor);
       sphereRef.current.material.emissiveIntensity = 0.6;
     }
   }, []);
@@ -49,24 +54,26 @@ export default function NodeStar({ node, index, total, innerRef }) {
     }
   });
 
+  const baseColor = typeColors[node.type] || '#ffffff';
+
   return (
-    <group ref={groupRef}>
-      <mesh
-        ref={sphereRef}
-        onPointerOver={() => (document.body.style.cursor = 'pointer')}
-        onPointerOut={() => (document.body.style.cursor = 'default')}
-      >
+    <group
+      ref={groupRef}
+      onPointerOver={() => setHoveredNodeId(node.id)}
+      onPointerOut={() => setHoveredNodeId(null)}
+    >
+      <mesh ref={sphereRef}>
         <sphereGeometry args={[0.3, 16, 16]} />
         <meshStandardMaterial
-          color={starColor}
-          emissive={starColor}
+          color={isHovered || isConnected ? 'yellow' : baseColor}
+          emissive={isHovered || isConnected ? 'yellow' : baseColor}
           emissiveIntensity={0.9}
         />
       </mesh>
       <Text
         ref={textRef}
         fontSize={0.6}
-        color = {isDark ? "white" : "black"}
+        color={isHovered || isConnected ? 'yellow' : baseColor}
         anchorX="center"
         anchorY="middle"
         position={[0, 0.8, 0]}

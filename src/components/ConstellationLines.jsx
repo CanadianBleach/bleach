@@ -4,10 +4,19 @@ import { useFrame } from '@react-three/fiber';
 import { graphData } from '../data/nodes';
 import React from 'react';
 
-export default function ConstellationLines({ nodeRefs, darkMode }) {
+export default function ConstellationLines({
+  nodeRefs,
+  darkMode,
+  hoveredNodeId,
+  hoveredLineIndex,
+  setHoveredLineIndex,
+  setHoveredNodeId,
+}) {
   const lineRefs = useRef([]);
 
-  useFrame(() => {
+  useFrame(({ raycaster }) => {
+    raycaster.params.Line.threshold = 0.15; // default is 1 — try 0.02–0.1 for precise lines
+
     graphData.edges.forEach(({ from, to }, i) => {
       const fromRef = nodeRefs[from];
       const toRef = nodeRefs[to];
@@ -26,16 +35,34 @@ export default function ConstellationLines({ nodeRefs, darkMode }) {
 
   return (
     <>
-      {graphData.edges.map((_, i) => (
-        <line key={i} ref={(el) => (lineRefs.current[i] = el)}>
-          <bufferGeometry />
-          <lineBasicMaterial
-            color={darkMode === true ? 'white' : 'black'}
-            transparent
-            opacity={0.4}
-          />
-        </line>
-      ))}
+      {graphData.edges.map(({ from, to }, i) => {
+        const isConnected = hoveredNodeId && (from === hoveredNodeId || to === hoveredNodeId);
+        const isHovered = hoveredLineIndex === i;
+
+        return (
+          <line
+            key={i}
+            ref={(el) => (lineRefs.current[i] = el)}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              setHoveredLineIndex(i);
+              setHoveredNodeId(from);
+            }}
+            onPointerOut={(e) => {
+              e.stopPropagation();
+              setHoveredLineIndex(null);
+              setHoveredNodeId(null);
+            }}
+          >
+            <bufferGeometry />
+            <lineBasicMaterial
+              color={isHovered || isConnected ? 'yellow' : darkMode ? 'white' : 'black'}
+              transparent
+              opacity={isHovered || isConnected ? 1.0 : 0.4}
+            />
+          </line>
+        );
+      })}
     </>
   );
 }

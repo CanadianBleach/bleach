@@ -11,23 +11,27 @@ export default function Home() {
 
     // Randomize blob styles
     useEffect(() => {
-        const blobs = document.querySelectorAll('.blob');
-        blobs.forEach((blob) => {
-            const size = `${80 + Math.random() * 40}vw`;
-            const top = `${Math.random() * 80}%`;
-            const left = `${Math.random() * 80}%`;
-            const blur = `${120 + Math.random() * 60}px`;
-            const duration = `${30 + Math.random() * 30}s`;
-            const opacity = 0.7 + Math.random() * 0.3;
+        const timeout = setTimeout(() => {
+            const blobs = document.querySelectorAll('.blob');
+            blobs.forEach((blob) => {
+                const size = `${40 + Math.random() * 20}vw`;
+                const top = `${Math.random() * 80}%`;
+                const left = `${Math.random() * 80}%`;
+                const blur = `${120 + Math.random() * 60}px`;
+                const duration = `${30 + Math.random() * 30}s`;
+                const opacity = 0.7 + Math.random() * 0.3;
 
-            blob.style.width = size;
-            blob.style.height = size;
-            blob.style.top = top;
-            blob.style.left = left;
-            blob.style.filter = `blur(${blur})`;
-            blob.style.animationDuration = duration;
-            blob.style.opacity = opacity;
-        });
+                blob.style.width = size;
+                blob.style.height = size;
+                blob.style.top = top;
+                blob.style.left = left;
+                blob.style.filter = `blur(${blur})`;
+                blob.style.animationDuration = duration;
+                blob.style.opacity = opacity;
+            });
+        }, 50); // Short delay to ensure DOM/layout is ready
+
+        return () => clearTimeout(timeout);
     }, []);
 
     // Mouse tracking
@@ -85,7 +89,7 @@ export default function Home() {
                 scrollTargetRef.current?.scrollIntoView({ behavior: 'smooth' });
             }} />
 
-            <section ref={scrollTargetRef} className="w-full h-screen relative z-0 overflow-hidden">
+            <section ref={scrollTargetRef} className="w-screen h-screen relative overflow-hidden z-0">
                 <ConstellationCanvas />
             </section>
         </>
@@ -110,10 +114,12 @@ function GradientBackground({ blobRef }) {
                 </defs>
             </svg>
             <div className="gradients-container">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className={`blob blob-${i}`} />
-                ))}
-                <div className="interactive" ref={blobRef} />
+                <div className="blob-layer">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <div key={i} className={`blob blob-${i}`} />
+                    ))}
+                    <div className="interactive" ref={blobRef} />
+                </div>
             </div>
         </div>
     );

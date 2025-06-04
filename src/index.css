@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 html {
-  @apply bg-white text-black;
+  background-color: white;
+  color: black;
 }
 
 @media (prefers-color-scheme: dark) {
   html {
-    @apply bg-black text-white;
+    background-color: black;
+    color: white;
   }
 }
 
@@ -102,133 +104,149 @@ body {
 }
 
 .gradient-bg {
-  width: 100vw;
-  min-height: 100%;
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: -1;
+  pointer-events: none;
   overflow: hidden;
   background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
+}
+
+svg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.gradient-bg::before {
+  content: "";
+  position: absolute;
+  width: 300%;
+  height: 300%;
+  background-image: radial-gradient(white 1px, transparent 1px);
+  background-size: 3px 3px;
+  animation: twinkle 120s linear infinite;
+  opacity: 0.07;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+}
+
+.gradients-container {
+  filter: url(#goo) blur(40px);
+  width: 100%;
+  height: 100%;
+}
+
+.blob-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  animation: moveInCircle infinite linear;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 0, 255, 0.8) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+
+  /* Constrain size and clipping */
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+  will-change: transform, width, height;
+  z-index: -1;
+}
+
+.blob-0 {
+  background: radial-gradient(
+    circle,
+    rgba(255, 80, 200, 0.8) 0%,
+    transparent 70%
+  );
+}
+
+.blob-1 {
+  background: radial-gradient(
+    circle,
+    rgba(80, 180, 255, 0.8) 0%,
+    transparent 70%
+  );
+}
+
+.blob-2 {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 100, 0.8) 0%,
+    transparent 70%
+  );
+}
+
+.blob-3 {
+  background: radial-gradient(
+    circle,
+    rgba(150, 255, 200, 0.8) 0%,
+    transparent 70%
+  );
+}
+
+.blob-4 {
+  background: radial-gradient(
+    circle,
+    rgba(255, 100, 100, 0.8) 0%,
+    transparent 70%
+  );
+}
+
+@keyframes twinkle {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes hueRotate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.interactive {
+  position: absolute;
+  background: radial-gradient(
+    circle at center,
+    rgba(var(--color-interactive), 0.9) 0%,
+    rgba(var(--color-interactive), 0.4) 30%,
+    rgba(var(--color-interactive), 0) 60%
+  );
+  mix-blend-mode: var(--blending);
+
+  width: 200px;
+  height: 200px;
   top: 0;
   left: 0;
 
-  svg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .gradient-bg::before {
-    content: "";
-    position: absolute;
-    width: 300%;
-    height: 300%;
-    background-image: radial-gradient(white 1px, transparent 1px);
-    background-size: 3px 3px;
-    animation: twinkle 120s linear infinite;
-    opacity: 0.07;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    z-index: -1;
-  }
-
-  .gradients-container {
-    filter: url(#goo) blur(40px);
-    width: 100%;
-    height: 100%;
-  }
-
-  .blob {
-    position: absolute;
-    border-radius: 50%;
-    mix-blend-mode: screen;
-    animation: moveInCircle infinite linear;
-    background: radial-gradient(
-      circle at center,
-      rgba(255, 0, 255, 0.8) 0%,
-      rgba(0, 0, 0, 0) 70%
-    );
-  }
-
-  .blob-0 {
-    background: radial-gradient(
-      circle,
-      rgba(255, 80, 200, 0.8) 0%,
-      transparent 70%
-    );
-  }
-
-  .blob-1 {
-    background: radial-gradient(
-      circle,
-      rgba(80, 180, 255, 0.8) 0%,
-      transparent 70%
-    );
-  }
-
-  .blob-2 {
-    background: radial-gradient(
-      circle,
-      rgba(255, 255, 100, 0.8) 0%,
-      transparent 70%
-    );
-  }
-
-  .blob-3 {
-    background: radial-gradient(
-      circle,
-      rgba(150, 255, 200, 0.8) 0%,
-      transparent 70%
-    );
-  }
-
-  .blob-4 {
-    background: radial-gradient(
-      circle,
-      rgba(255, 100, 100, 0.8) 0%,
-      transparent 70%
-    );
-  }
-
-  @keyframes twinkle {
-    0% {
-      transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(360deg);
-    }
-  }
-
-  @keyframes hueRotate {
-    0% {
-      filter: hue-rotate(0deg);
-    }
-    100% {
-      filter: hue-rotate(360deg);
-    }
-  }
-
-  .interactive {
-    position: absolute;
-    background: radial-gradient(
-      circle at center,
-      rgba(var(--color-interactive), 0.9) 0%,
-      rgba(var(--color-interactive), 0.4) 30%,
-      rgba(var(--color-interactive), 0) 60%
-    );
-    mix-blend-mode: var(--blending);
-
-    width: 200px;
-    height: 200px;
-    top: 0;
-    left: 0;
-
-    opacity: 1;
-    filter: blur(40px);
-    pointer-events: none;
-    animation: hueRotate 20s linear infinite;
-  }
+  opacity: 1;
+  filter: blur(40px);
+  pointer-events: none;
+  animation: hueRotate 20s linear infinite;
 }

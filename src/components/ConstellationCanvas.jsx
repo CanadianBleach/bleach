@@ -1,7 +1,7 @@
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { useRef, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import NodeStar from './NodeStar';
 import ConstellationLines from './ConstellationLines';
 import { graphData } from '../data/nodes';
@@ -9,11 +9,13 @@ import React from 'react';
 import usePrefersDarkMode from '../hooks/usePrefersDarkMode';
 
 export default function ConstellationCanvas({ orbitEnabled = true }) {
-  // Create refs for all nodes (no hooks inside loops)
+  const [hoveredNodeId, setHoveredNodeId] = useState(null);
+  const [hoveredLineIndex, setHoveredLineIndex] = useState(null);
+
   const nodeRefs = useMemo(() => {
     const refs = {};
     graphData.nodes.forEach((node) => {
-      refs[node.id] = { current: null }; // mimic useRef shape
+      refs[node.id] = { current: null };
     });
     return refs;
   }, []);
@@ -31,13 +33,26 @@ export default function ConstellationCanvas({ orbitEnabled = true }) {
         });
       }}
     >
-      {/* ✅ Pass it here */}
-      <SceneContent nodeRefs={nodeRefs} orbitEnabled={orbitEnabled} />
+      <SceneContent
+        nodeRefs={nodeRefs}
+        orbitEnabled={orbitEnabled}
+        hoveredNodeId={hoveredNodeId}
+        setHoveredNodeId={setHoveredNodeId}
+        hoveredLineIndex={hoveredLineIndex}
+        setHoveredLineIndex={setHoveredLineIndex}
+      />
     </Canvas>
   );
 }
 
-function SceneContent({ nodeRefs, orbitEnabled }) {
+function SceneContent({
+  nodeRefs,
+  orbitEnabled,
+  hoveredNodeId,
+  setHoveredNodeId,
+  hoveredLineIndex,
+  setHoveredLineIndex,
+}) {
   const isDark = usePrefersDarkMode();
   const { camera } = useThree();
 
@@ -58,16 +73,31 @@ function SceneContent({ nodeRefs, orbitEnabled }) {
           index={i}
           total={graphData.nodes.length}
           innerRef={nodeRefs[node.id]}
+          isHovered={hoveredNodeId === node.id}
+          isConnected={
+            hoveredNodeId &&
+            graphData.edges.some(
+              (e) =>
+                (e.from === hoveredNodeId && e.to === node.id) ||
+                (e.to === hoveredNodeId && e.from === node.id)
+            )
+          }
+          setHoveredNodeId={setHoveredNodeId}
         />
       ))}
 
-      <ConstellationLines nodeRefs={nodeRefs} darkMode={isDark} />
+      <ConstellationLines
+        nodeRefs={nodeRefs}
+        darkMode={isDark}
+        hoveredNodeId={hoveredNodeId}
+        hoveredLineIndex={hoveredLineIndex}
+        setHoveredLineIndex={setHoveredLineIndex}
+        setHoveredNodeId={setHoveredNodeId}
+      />
 
       <Stars radius={100} depth={50} count={1000} factor={4} fade speed={1} />
 
-      {orbitEnabled && (
-        <OrbitControls enableZoom={false} enablePan={true} enableRotate={true} />
-      )}
+      {orbitEnabled && <OrbitControls enableZoom={false} enablePan enableRotate />}
 
       <EffectComposer>
         <Bloom luminanceThreshold={0} luminanceSmoothing={0.5} intensity={0.25} />
