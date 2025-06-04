@@ -115,14 +115,6 @@ body {
   background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
 }
 
-svg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-}
-
 .gradient-bg::before {
   content: "";
   position: absolute;
@@ -231,22 +223,24 @@ svg {
 }
 
 .interactive {
-  position: absolute;
+  position: fixed; /* ✅ REQUIRED */
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+
   background: radial-gradient(
     circle at center,
     rgba(var(--color-interactive), 0.9) 0%,
     rgba(var(--color-interactive), 0.4) 30%,
     rgba(var(--color-interactive), 0) 60%
   );
-  mix-blend-mode: var(--blending);
 
-  width: 200px;
-  height: 200px;
-  top: 0;
-  left: 0;
+  mix-blend-mode: var(--blending);
+  filter: blur(40px);
+  animation: hueRotate 20s linear infinite;
 
   opacity: 1;
-  filter: blur(40px);
   pointer-events: none;
-  animation: hueRotate 20s linear infinite;
+  z-index: 50; /* important to keep above blobs */
 }

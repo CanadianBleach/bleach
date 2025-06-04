@@ -46,7 +46,7 @@ export default function NodeStar({
     if (sphereRef.current?.material) {
       sphereRef.current.material.emissiveIntensity = 0.6;
     }
-  }, []);
+  });
 
   useFrame(() => {
     if (textRef.current) {

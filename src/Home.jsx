@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import './index.css';
-import { ArrowDown } from 'phosphor-react';
 import ConstellationCanvas from './components/ConstellationCanvas';
-import React from 'react';
+import AboutMe from './components/AboutMe';
+import { ScrollArrow } from './components/ScrollArrow';
+import { GradientBackground } from './components/GradientBackground';
 
 export default function Home() {
     const bubbleRef = useRef(null);
     const [atTop, setAtTop] = useState(true);
-    const scrollTargetRef = useRef(null);
+    const constellationRef = useRef(null);
+    const aboutRef = useRef(null);
 
     // Randomize blob styles
     useEffect(() => {
@@ -29,27 +31,27 @@ export default function Home() {
                 blob.style.animationDuration = duration;
                 blob.style.opacity = opacity;
             });
-        }, 50); // Short delay to ensure DOM/layout is ready
+        }, 50);
 
         return () => clearTimeout(timeout);
     }, []);
 
-    // Mouse tracking
+    // Mouse tracking + scroll detection
     useEffect(() => {
         const blob = bubbleRef.current;
         if (!blob) return;
 
-        let curX = 0,
-            curY = 0,
-            tgX = 0,
-            tgY = 0;
+        let curX = 0, curY = 0, tgX = 0, tgY = 0;
 
         const move = () => {
             curX += (tgX - curX) / 20;
             curY += (tgY - curY) / 20;
-            blob.style.transform = `translate(${Math.round(curX - 100)}px, ${Math.round(
-                curY - 100
-            )}px)`;
+
+            // Adjust these if you tweak blob size or blur
+            const offsetX = 100;
+            const offsetY = 250;
+
+            blob.style.transform = `translate(${Math.round(curX - offsetX)}px, ${Math.round(curY - offsetY)}px)`;
             requestAnimationFrame(move);
         };
 
@@ -76,6 +78,7 @@ export default function Home() {
         <>
             <GradientBackground blobRef={bubbleRef} />
 
+            {/* Hero Section */}
             <section className="min-h-screen w-full flex flex-col items-center justify-center text-center gap-4 z-10 relative text-black dark:text-white">
                 <h1 className="font-anton text-6xl md:text-8xl font-extrabold">
                     here’s my stuff
@@ -83,56 +86,32 @@ export default function Home() {
                 <h2 className="font-anton text-4xl md:text-6xl font-semibold">
                     (connor baltich)
                 </h2>
+                {/* Scroll to constellation */}
+                <ScrollArrow
+                    visible={atTop}
+                    onClick={() => constellationRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                />
             </section>
 
-            <ScrollArrow visible={atTop} onClick={() => {
-                scrollTargetRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }} />
-
-            <section ref={scrollTargetRef} className="w-screen h-screen relative overflow-hidden z-0">
+            {/* Constellation Section */}
+            <section
+                ref={constellationRef}
+                className="w-screen h-screen relative overflow-visible z-0 flex flex-col justify-center items-center pb-16 pt-16"
+            >
                 <ConstellationCanvas />
+                <ScrollArrow
+                    visible={true}
+                    onClick={() => aboutRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                />
+            </section>
+
+            {/* About Me Section */}
+            <section
+                ref={aboutRef}
+                className="w-screen min-h-screen relative overflow-hidden z-0"
+            >
+                <AboutMe />
             </section>
         </>
-    );
-}
-
-function GradientBackground({ blobRef }) {
-    return (
-        <div className="gradient-bg absolute top-0 left-0 w-screen z-[-1]" style={{ minHeight: '100%' }}>
-            <svg xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <filter id="goo">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                        <feColorMatrix
-                            in="blur"
-                            mode="matrix"
-                            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
-                            result="goo"
-                        />
-                        <feBlend in="SourceGraphic" in2="goo" />
-                    </filter>
-                </defs>
-            </svg>
-            <div className="gradients-container">
-                <div className="blob-layer">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                        <div key={i} className={`blob blob-${i}`} />
-                    ))}
-                    <div className="interactive" ref={blobRef} />
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function ScrollArrow({ visible, onClick }) {
-    return (
-        <div
-            onClick={onClick}
-            className={`cursor-pointer fixed bottom-4 left-1/2 m-4 -translate-x-1/2 z-20 transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'
-                } text-black dark:text-white animate-bounce`}
-        >
-            <ArrowDown size={44} />
-        </div>
     );
 }
