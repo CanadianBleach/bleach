@@ -5,7 +5,7 @@ export const graphData = {
     { id: 'bleach', type: 'project', label: 'Bleach', url: 'https://github.com/CanadianBleach/bleach' },
     { id: 'liminal', type: 'project', label: 'Liminal', url: 'https://liminal-nine.vercel.app/' },
     { id: 'timeTraveler', type: 'project', label: 'Time Traveler', url: 'https://github.com/CanadianBleach/time-traveler' },
-    { id: 'bdUtil', type: 'project', label: 'BD-Util', url: 'https://github.com/CanadianBleach/bd-util/tree/main' },
+    { id: 'bdUtil', type: 'project', label: 'BD-Util', url: 'https://github.com/CanadianBleach/bd-util' },
     { id: 'unityWeapons', type: 'project', label: 'Unity Weapon Package', url: 'https://github.com/CanadianBleach/Unity-Weapon-Package' },
 
     // Skills
