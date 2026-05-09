@@ -8,7 +8,7 @@ Bleach is a modern 3D portfolio website designed to showcase projects, creativit
 
 ## Live Website
 
-[https://bleach-seven.vercel.app/](https://bleach-seven.vercel.app/)
+[Bleach](https://bleach-seven.vercel.app/)
 
 ## Tech Stack
 
