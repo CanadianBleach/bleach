@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeOpacity 0.76s ease-out forwards;
+}
+
+@keyframes fadeOpacity {
+  to {
+    opacity: 1;
+  }
+}
+
+section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
 html {
   background-color: white;
   color: black;
@@ -120,10 +145,18 @@ body {
   position: absolute;
   width: 300%;
   height: 300%;
-  background-image: radial-gradient(white 1px, transparent 1px);
-  background-size: 3px 3px;
+
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.8) 0.5px,
+    transparent 0.5px
+  );
+
+  background-size: 8px 8px;
+
   animation: twinkle 120s linear infinite;
-  opacity: 0.07;
+
+  opacity: 0.03;
+
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;

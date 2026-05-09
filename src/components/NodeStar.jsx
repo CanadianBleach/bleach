@@ -15,23 +15,42 @@ export default function NodeStar({
   index,
   total,
   innerRef,
-  isHovered,
-  isConnected,
-  setHoveredNodeId,
+
+  isHighlighted,
+
+  activeNodeId,
+  setActiveNodeId,
+  setSelectedProject
 }) {
-  const groupRef = innerRef || useRef();
+  const isProject = node.type === 'project';
+
+  const fallbackRef = useRef();
+
+  const groupRef = innerRef || fallbackRef;
+
   const sphereRef = useRef();
   const textRef = useRef();
+
   const { camera } = useThree();
 
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
   const y = 1 - (index / (total - 1)) * 2;
-  const radius = 8;
+
+  const radius = 10;
+
   const distance = Math.sqrt(1 - y * y);
+
   const theta = goldenAngle * index;
+
   const x = Math.cos(theta) * distance;
   const z = Math.sin(theta) * distance;
-  const position = [x * radius, y * radius, z * radius];
+
+  const position = [
+    x * radius,
+    y * radius,
+    z * radius
+  ];
 
   useEffect(() => {
     if (groupRef.current) {
@@ -39,10 +58,12 @@ export default function NodeStar({
       groupRef.current.userData.type = 'star';
       groupRef.current.layers.set(0);
     }
+
     if (textRef.current) {
       textRef.current.userData.type = 'text';
       textRef.current.layers.set(1);
     }
+
     if (sphereRef.current?.material) {
       sphereRef.current.material.emissiveIntensity = 0.6;
     }
@@ -54,27 +75,59 @@ export default function NodeStar({
     }
   });
 
-  const baseColor = typeColors[node.type] || '#ffffff';
+  const baseColor =
+    typeColors[node.type] || '#ffffff';
+
+  const isSelected =
+    activeNodeId === node.id;
+
+  const highlighted = isHighlighted;
 
   return (
     <group
       ref={groupRef}
-      onPointerOver={() => setHoveredNodeId(node.id)}
-      onPointerOut={() => setHoveredNodeId(null)}
-      onClick={() => { if (node.url) window.open(node.url, '_blank'); }}
+
+      onPointerOver={() => {
+        setActiveNodeId(node.id);
+
+        if (isProject) {
+          document.body.style.cursor = 'pointer';
+        }
+      }}
+
+      onPointerOut={() => {
+        document.body.style.cursor = 'default';
+      }}
+
+      onClick={() => {
+        if (isProject) {
+          setActiveNodeId(node.id);
+          setSelectedProject(node);
+        }
+      }}
     >
-      <mesh ref={sphereRef} raycastPriority={2}>
+      <mesh
+        ref={sphereRef}
+        raycastPriority={2}
+        scale={isSelected ? 1.35 : 1}
+      >
         <sphereGeometry args={[0.3, 16, 16]} />
+
         <meshStandardMaterial
-          color={isHovered || isConnected ? 'yellow' : baseColor}
-          emissive={isHovered || isConnected ? 'yellow' : baseColor}
+          color={highlighted ? 'yellow' : baseColor}
+
+          emissive={highlighted ? 'yellow' : baseColor}
+
           emissiveIntensity={0.9}
         />
       </mesh>
+
       <Text
         ref={textRef}
-        fontSize={0.6}
-        color={isHovered || isConnected ? 'yellow' : baseColor}
+        fontSize={0.65}
+
+        color={highlighted ? 'yellow' : baseColor}
+
         anchorX="center"
         anchorY="middle"
         position={[0, 0.8, 0]}

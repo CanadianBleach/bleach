@@ -7,8 +7,9 @@ export default function AboutMe() {
 
       {/* Intro line */}
       <p className="max-w-2xl text-2xl mb-8">
-        I'm a creative developer who loves building 3D experiences, experimenting with AI, and making cool stuff on the web.
-        Always exploring, always learning.
+        I’ve developed a practical, hands-on approach to solving problems and supporting day-to-day operations. With experience across IT
+        support, web development, and technical systems management, I am excited for the opportunity to bring that same reliability,
+        curiosity, and willingness to learn to your team.
       </p>
 
       {/* Socials */}
@@ -19,20 +20,13 @@ export default function AboutMe() {
         <a href="https://linkedin.com/in/connorbaltich" target="_blank" rel="noopener noreferrer">
           <FaLinkedin size={38} className="hover:text-blue-400 transition-colors" />
         </a>
-        <a href="https://www.instagram.com/canadianbleach/" target="_blank" rel="noopener noreferrer">
-          <FaInstagram size={38} className="hover:text-blue-400 transition-colors" />
-        </a>
       </div>
 
       {/* Extended bio */}
       <div className="max-w-2xl text-lg leading-relaxed">
         <p className="mb-4">
-          I’m based in Athens, GA and have been building for the web since 2018. My work spans interactive front-ends, AI integrations,
-          physics simulations, and portfolio experiments — often blending React, Three.js, and visual storytelling.
-        </p>
-        <p>
-          I’m constantly learning and tinkering, whether it’s designing immersive dev tools, writing shaders,
-          or playing with automation in my homelab. I care about thoughtful interfaces and weird, wonderful digital experiences.
+          I’ve always enjoyed being the person people turn to when something technical stops working or needs a better solution. From helping
+          customers troubleshoot devices and understand unfamiliar technology to building internal tools and managing business websites,
         </p>
       </div>
     </section>

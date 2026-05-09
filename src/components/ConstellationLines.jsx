@@ -7,10 +7,12 @@ import React from 'react';
 export default function ConstellationLines({
   nodeRefs,
   darkMode,
-  hoveredNodeId,
+
+  activeNodeId,
+  setActiveNodeId,
+
   hoveredLineIndex,
   setHoveredLineIndex,
-  setHoveredNodeId,
 }) {
   const lineRefs = useRef([]);
 
@@ -23,47 +25,94 @@ export default function ConstellationLines({
       const line = lineRefs.current[i];
 
       if (fromRef?.current && toRef?.current && line) {
+
         const pos = new Float32Array([
-          fromRef.current.position.x, fromRef.current.position.y, fromRef.current.position.z,
-          toRef.current.position.x, toRef.current.position.y, toRef.current.position.z
+          fromRef.current.position.x,
+          fromRef.current.position.y,
+          fromRef.current.position.z,
+
+          toRef.current.position.x,
+          toRef.current.position.y,
+          toRef.current.position.z
         ]);
-        line.geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+        line.geometry.setAttribute(
+          'position',
+          new THREE.BufferAttribute(pos, 3)
+        );
+
         line.geometry.attributes.position.needsUpdate = true;
-        line.geometry.computeBoundingSphere(); // ✅ Crucial for raycasting accuracy
+
+        line.geometry.computeBoundingSphere();
       }
     });
   });
 
-
   return (
     <>
       {graphData.edges.map(({ from, to }, i) => {
-        const isConnected = hoveredNodeId && (from === hoveredNodeId || to === hoveredNodeId);
-        const isHovered = hoveredLineIndex === i;
+
+        const isHovered =
+          hoveredLineIndex === i;
+
+        const isConnected =
+          activeNodeId &&
+          (
+            from === activeNodeId ||
+            to === activeNodeId
+          );
+
+        const highlighted =
+          isHovered ||
+          isConnected;
 
         return (
           <line
-          raycastPriority={1}
             key={i}
+
+            raycastPriority={1}
+
             ref={(el) => (lineRefs.current[i] = el)}
+
             onPointerOver={(e) => {
               e.stopPropagation();
+
               setHoveredLineIndex(i);
-              setHoveredNodeId(from);
+
+              // Persist active constellation
+              setActiveNodeId(from);
             }}
+
             onPointerOut={(e) => {
               e.stopPropagation();
+
               setHoveredLineIndex(null);
-              setHoveredNodeId(null);
+
+              // Do NOT clear active node anymore
             }}
           >
             <bufferGeometry />
+
             <lineBasicMaterial
-              color={isHovered || isConnected ? 'yellow' : darkMode ? 'white' : 'black'}
+              color={
+                highlighted
+                  ? 'yellow'
+                  : darkMode
+                    ? 'white'
+                    : 'black'
+              }
+
               transparent
-              opacity={isHovered || isConnected ? 1.0 : 0.4}
-              depthTest={true} // Default is fine here
-              depthWrite={false} // Prevent it from occluding other things
+
+              opacity={
+                highlighted
+                  ? 1
+                  : 0.2
+              }
+
+              depthTest={true}
+
+              depthWrite={false}
             />
           </line>
         );

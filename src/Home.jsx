@@ -4,12 +4,42 @@ import ConstellationCanvas from './components/ConstellationCanvas';
 import AboutMe from './components/AboutMe';
 import { ScrollArrow } from './components/ScrollArrow';
 import { GradientBackground } from './components/GradientBackground';
+import ProjectCard from './components/ProjectCard';
 
 export default function Home() {
     const bubbleRef = useRef(null);
     const [atTop, setAtTop] = useState(true);
     const constellationRef = useRef(null);
     const aboutRef = useRef(null);
+    const [showConstellationInfo, setShowConstellationInfo] = useState(false);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [activeNodeId, setActiveNodeId] = useState(null);
+
+    // Constellation info card fade in 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setShowConstellationInfo(true);
+                }
+            },
+            {
+                threshold: 0.6,
+            }
+        );
+
+        const currentRef = constellationRef.current;
+
+        if (currentRef) {
+            observer.observe(currentRef);
+        }
+
+        return () => {
+            if (currentRef) {
+                observer.unobserve(currentRef);
+            }
+        };
+    }, []);
 
     // Randomize blob styles
     useEffect(() => {
@@ -75,43 +105,86 @@ export default function Home() {
     }, []);
 
     return (
-        <>
+        <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
             <GradientBackground blobRef={bubbleRef} />
 
             {/* Hero Section */}
-            <section className="min-h-screen w-full flex flex-col items-center justify-center text-center gap-4 z-10 relative text-black dark:text-white">
+            <section className="min-h-screen w-full flex flex-col snap-start items-center justify-center text-center gap-4 z-10 relative text-black dark:text-white">
                 <h1 className="font-anton text-6xl md:text-8xl font-extrabold">
                     here’s my stuff
                 </h1>
+
                 <h2 className="font-anton text-4xl md:text-6xl font-semibold">
                     (connor baltich)
                 </h2>
-                {/* Scroll to constellation */}
+
                 <ScrollArrow
                     visible={atTop}
-                    onClick={() => constellationRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    onClick={() =>
+                        constellationRef.current?.scrollIntoView({
+                            behavior: 'smooth',
+                        })
+                    }
                 />
             </section>
 
             {/* Constellation Section */}
             <section
                 ref={constellationRef}
-                className="w-screen h-screen relative overflow-visible z-0 flex flex-col justify-center items-center pb-16 pt-16"
+                className="
+                w-full
+                h-screen
+                relative
+                snap-start
+                overflow-visible
+                z-0
+                flex
+                flex-col
+                justify-center
+                items-center
+                pb-16
+                pt-16
+            "
             >
-                <ConstellationCanvas />
+                <ConstellationCanvas
+                    selectedProject={selectedProject}
+                    setSelectedProject={setSelectedProject}
+
+                    activeNodeId={activeNodeId}
+                    setActiveNodeId={setActiveNodeId}
+
+                    showInfo={showConstellationInfo}
+                    setShowInfo={setShowConstellationInfo}
+                />
                 <ScrollArrow
                     visible={true}
-                    onClick={() => aboutRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    onClick={() =>
+                        aboutRef.current?.scrollIntoView({
+                            behavior: 'smooth',
+                        })
+                    }
                 />
             </section>
 
             {/* About Me Section */}
             <section
                 ref={aboutRef}
-                className="w-screen min-h-screen relative overflow-hidden z-0"
+                className="
+                w-full
+                min-h-screen
+                snap-start
+                relative
+                overflow-hidden
+                z-0
+            "
             >
                 <AboutMe />
             </section>
-        </>
+
+            <ProjectCard
+                project={selectedProject}
+                onClose={() => setSelectedProject(null)}
+            />
+        </div>
     );
 }

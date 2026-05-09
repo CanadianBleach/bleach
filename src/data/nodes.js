@@ -2,11 +2,60 @@
 export const graphData = {
   nodes: [
     // Projects
-    { id: 'bleach', type: 'project', label: 'Bleach', url: 'https://github.com/CanadianBleach/bleach' },
-    { id: 'liminal', type: 'project', label: 'Liminal', url: 'https://liminal-nine.vercel.app/' },
-    { id: 'timeTraveler', type: 'project', label: 'Time Traveler', url: 'https://github.com/CanadianBleach/time-traveler' },
-    { id: 'bdUtil', type: 'project', label: 'BD-Util', url: 'https://github.com/CanadianBleach/bd-util' },
-    { id: 'unityWeapons', type: 'project', label: 'Unity Weapon Package', url: 'https://github.com/CanadianBleach/Unity-Weapon-Package' },
+    {
+      id: 'bleach',
+      type: 'project',
+      label: 'Bleach',
+      title: 'Bleach',
+      description:
+        'A personal portfolio and experimental web project focused on immersive UI and interactive experiences.',
+      tech: ['React', 'Three.js', 'Vite'],
+      url: 'https://github.com/CanadianBleach/bleach',
+    },
+
+    {
+      id: 'liminal',
+      type: 'project',
+      label: 'Liminal',
+      title: 'Liminal',
+      description:
+        'An atmospheric 3D web experience built around exploration, mood, and physics-based interaction.',
+      tech: ['Three.js', 'Rapier', 'JavaScript'],
+      url: 'https://liminal-nine.vercel.app/',
+    },
+
+    {
+      id: 'timeTraveler',
+      type: 'project',
+      label: 'Time Traveler',
+      title: 'Time Traveler',
+      description:
+        'A music-focused timeline app integrating Spotify APIs and dynamic React interfaces.',
+      tech: ['React', 'Spotify API', 'CSS'],
+      url: 'https://github.com/CanadianBleach/time-traveler',
+    },
+
+    {
+      id: 'bdUtil',
+      type: 'project',
+      label: 'BD-Util',
+      title: 'BD-Util',
+      description:
+        'A utility platform with mapping tools, database integration, and modern web tooling.',
+      tech: ['Next.js', 'MongoDB', 'Leaflet'],
+      url: 'https://github.com/CanadianBleach/bd-util',
+    },
+
+    {
+      id: 'unityWeapons',
+      type: 'project',
+      label: 'Unity Weapon Package',
+      title: 'Unity Weapon Package',
+      description:
+        'A modular FPS weapon system package built in Unity using C#.',
+      tech: ['Unity', 'C#'],
+      url: 'https://github.com/CanadianBleach/Unity-Weapon-Package',
+    },
 
     // Skills
     { id: 'react', type: 'skill', label: 'React' },
@@ -42,12 +91,16 @@ export const graphData = {
     { from: 'liminal', to: 'rapier' },
     { from: 'liminal', to: 'css' },
     { from: 'liminal', to: 'javascript' },
+    { from: 'liminal', to: 'vite' },
+
 
     // Time Traveler
     { from: 'timeTraveler', to: 'react' },
     { from: 'timeTraveler', to: 'spotifyApi' },
     { from: 'timeTraveler', to: 'css' },
     { from: 'timeTraveler', to: 'javascript' },
+    { from: 'timeTraveler', to: 'vite' },
+
 
     // BD-Util
     { from: 'bdUtil', to: 'nextjs' },
@@ -56,6 +109,8 @@ export const graphData = {
     { from: 'bdUtil', to: 'leaflet' },
     { from: 'bdUtil', to: 'css' },
     { from: 'bdUtil', to: 'javascript' },
+    { from: 'bdUtil', to: 'vite' },
+
 
     // Unity Weapon Package
     { from: 'unityWeapons', to: 'csharp' },
