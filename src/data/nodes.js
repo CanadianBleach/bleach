@@ -21,7 +21,7 @@ export const graphData = {
       description:
         'An atmospheric 3D web experience built around exploration, mood, and physics-based interaction.',
       tech: ['Three.js', 'Rapier', 'JavaScript'],
-      url: 'https://liminal-nine.vercel.app/',
+      url: 'https://github.com/CanadianBleach/Liminal',
     },
 
     {
